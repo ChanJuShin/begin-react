@@ -1,9 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext, useCallback } from 'react';
+import { UserDispatch } from "./App";
 
-const User = React.memo(function({ user, onRemove, onToggle }) {
+const User = React.memo(function({ user }) {
   useEffect(() => {
     console.log('User');
   });
+
+  const dispatch = useContext(UserDispatch);
+
+  const onToggle = useCallback(id => {
+    dispatch({
+      type: 'TOGGLE_USER',
+      id
+    });
+  }, [dispatch]);
+
+  const onRemove = useCallback(id => {
+    dispatch({
+      type: 'REMOVE_USER',
+      id
+    });
+  }, [dispatch]);
+
   return (
     <div>
       <b
@@ -20,14 +38,14 @@ const User = React.memo(function({ user, onRemove, onToggle }) {
   );
 });
 
-function UserList({ users, onRemove, onToggle }) {
+function UserList({ users }) {
   useEffect(() => {
     console.log('UserList');
   });
   return (
     <div>
       {users.map(user => (
-        <User user={user} key={user.id} onRemove={onRemove} onToggle={onToggle} />
+        <User user={user} key={user.id} />
       ))}
     </div>
   )
